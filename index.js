@@ -9,9 +9,97 @@ client.modCases = new Enmap({ name: 'moderation-cases-guild' });
 client.userModCases = new Enmap({ name: 'user-mod-cases' });
 client.roleHierachy = require('./functions/roleHierarchy');
 client.execHelp = require('./functions/execHelp.js');
-
+client.commands = new Enmap();
+client.aliases = new Enmap();
+client.activeMutes = new Enmap({ name: 'active-mutes' });
+//
+//
+fs.readdir("./commands/Admin/", (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+      if (!file.endsWith(".js")) return;
+      let props = require(`./commands/Admin/${file}`);
+      let commandName = file.split(".")[0];
+      console.log(`Attempting to load command ${commandName}`);
+      client.commands.set(commandName, props);
+      console.log(`[ LOADED ] Loaded command ${props.help.name}`);
+    });
+  });
+  fs.readdir("./commands/Admin-Conf/", (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+      if (!file.endsWith(".js")) return;
+      let props = require(`./commands/Admin-Conf/${file}`);
+      let commandName = file.split(".")[0];
+      console.log(`Attempting to load command ${commandName}`);
+      client.commands.set(commandName, props);
+      console.log(`[ LOADED ] Loaded command ${props.help.name}`)
+    });
+  });
+  fs.readdir("./commands/Dev-Only/", (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+      if (!file.endsWith(".js")) return;
+      let props = require(`./commands/Dev-Only/${file}`);
+      let commandName = file.split(".")[0];
+      console.log(`Attempting to load command ${commandName}`);
+      client.commands.set(commandName, props);
+      console.log(`[ LOADED ] Loaded command ${props.help.name}`)
+    });
+  });
+  fs.readdir("./commands/Games/", (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+      if (!file.endsWith(".js")) return;
+      let props = require(`./commands/Games/${file}`);
+      let commandName = file.split(".")[0];
+      console.log(`Attempting to load command ${commandName}`);
+      client.commands.set(commandName, props);
+      console.log(`[ LOADED ] Loaded command ${props.help.name}`)
+    });
+  });
+  fs.readdir("./commands/Moderator/", (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+      if (!file.endsWith(".js")) return;
+      let props = require(`./commands/Moderator/${file}`);
+      let commandName = file.split(".")[0];
+      console.log(`Attempting to load command ${commandName}`);
+      client.commands.set(commandName, props);
+      console.log(`[ LOADED ] Loaded command ${props.help.name}`)
+    });
+  });
+  fs.readdir("./commands/Moderator-Fun/", (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+      if (!file.endsWith(".js")) return;
+      let props = require(`./commands/Moderator-Fun/${file}`);
+      let commandName = file.split(".")[0];
+      console.log(`Attempting to load command ${commandName}`);
+      client.commands.set(commandName, props);
+      console.log(`[ LOADED ] Loaded command ${props.help.name}`)
+    });
+  });
+  fs.readdir("./commands/Utility/", (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+      if (!file.endsWith(".js")) return;
+      let props = require(`./commands/Utility/${file}`);
+      let commandName = file.split(".")[0];
+      console.log(`Attempting to load command ${commandName}`);
+      client.commands.set(commandName, props);
+      });
+  });
+//
+//
 client.on('ready', () => {
+  let unmuteFunction = require('./functions/unmute.js');
     console.log(`Logged in as ${client.user.tag}.`);
+    //
+    client.setInterval(() => {
+      unmuteFunction(client);
+    }, (60000));
+    //
 });
 
 client.on('error', (error) => {
@@ -41,15 +129,11 @@ client.on('message', async (message) => {
     /**
      * extremely shitty and dangerous command 'handler' right here. But it'll do for this.
      */
-    let cmdFile = require(`./commands/${command}.js`);
-    if (!cmdFile) return;
-    // if (!message.member.permissions.has(cmdFile.conf.perms.user)) {
-    //     return message.channel.send(`:no_entry: **You require the permission \`${cmdFile.conf.perms.user}\` to run this command.**`);
-    // };
-    try {
-        await cmdFile.run(client, message, args);
-    } catch (e) {
-        console.error(e.stack);
-        return message.channel.send(`:no_entry: **ERROR** | \`${e.message}\``);
-    };
+    console.log(client.commands);
+    const cmd = client.commands.get(command);
+    console.log(!cmd)
+    if (!cmd) return;
+    cmd.run(client, message, args);
 });
+
+process.on('unhandledRejection', e => console.log(e));
