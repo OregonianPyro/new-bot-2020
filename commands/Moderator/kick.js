@@ -8,10 +8,10 @@ module.exports.run = async (client, message, args) => {
     if (!args[0]) return client.execHelp(message, 'kick');
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if (!member) return client.execHelp(message, 'kick');
-    if (member.roles.highest.rawPosition >= message.member.roles.highest.rawPosition) {
-        message.delete();
-        return message.channel.send('**You cannot moderate a user with an equal or higher role than you.**');
-    };
+    // if (member.roles.highest.rawPosition >= message.member.roles.highest.rawPosition) {
+    //     message.delete();
+    //     return message.channel.send('**You cannot moderate a user with an equal or higher role than you.**');
+    // };
     if (member.user.id === message.author.id) {
         message.delete();
         return message.channel.send('**You cannot moderate yourself.**');

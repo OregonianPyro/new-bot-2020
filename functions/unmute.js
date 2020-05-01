@@ -4,7 +4,26 @@ module.exports = async (client) => {
     const sandbox = client.activeMutes.array();
     for (let i in sandbox) {
         const time = ms(sandbox[i].time);
-        console.log(` ************************************************** TIME************: ${time}`);
+        const guild = client.guilds.cache.get(sandbox[i].guild);
+        if (!guild) continue;
+        const guildMutedRole = guild.roles.cache.get(sandbox[i].guild_muted_role);
+        if (!guildMutedRole) continue;
+        const member = guild.members.cache.get(sandbox[i].id);
+        if (!member) continue;
+        if (Date.now() > time) {
+            try {
+                await member.roles.remove(guildMutedRole);
+            } catch (e) {
+                console.error(`Error unmuting ${member.user.id}: ${e}`);
+                continue;
+            };
+            console.log(`[ UNMUTED ] Successfully unmuted ${member.user.tag}`);
+        };
+    };
+};
+    // for (let i in sandbox) {
+      //  const time = ms(sandbox[i].time);
+       // console.log(` ************************************************** TIME************: ${time}`);
         /*const guild = client.guilds.cache.get(sandbox[i].guild);
         const guildMutedRole = guild.roles.cache.get(sandbox[i].guild_muted_role);
         if (!guildMutedRole) continue;
@@ -71,7 +90,7 @@ module.exports = async (client) => {
             channel.send(logEmbed);
             ///
             };*/
-        };
+        //};
         // for (let i in client.activeMutes.get("1")) {
         //     const time = client.activeMutes.get("1")[i].time;
         //     const guildId = client.activeMutes.get("1")[i].guild;
@@ -85,7 +104,6 @@ module.exports = async (client) => {
         //         client.activeMutes.get("1").splice(indexOf(client.activeMutes.get("1")[i].id), 1) 
         //     }
         // }
-};
 
 /*
 example:

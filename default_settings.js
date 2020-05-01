@@ -38,27 +38,13 @@ module.exports = {
     greeting:{
         enabled: false,
         id: null,
-        type:{
-            msg:{
-                text: null
-            },
-            embed:{
-                footer: null,
-                text: null
-            }
-        }
+        type: 'msg',
+        text: null
     },
     leaving:{
         enabled: false,
         id: null,
-        type:{
-            msg:{
-                text: null
-            },
-            embed:{
-                footer: null,
-                text: null
-            }
-        }
+        type: 'msg',
+        text: null
     }
 }

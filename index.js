@@ -12,6 +12,7 @@ client.execHelp = require('./functions/execHelp.js');
 client.commands = new Enmap();
 client.aliases = new Enmap();
 client.activeMutes = new Enmap({ name: 'active-mutes' });
+client.spam = new Enmap({ name: "spam" });
 //
 //
 fs.readdir("./commands/Admin/", (err, files) => {
@@ -92,48 +93,13 @@ fs.readdir("./commands/Admin/", (err, files) => {
   });
 //
 //
-client.on('ready', () => {
-  let unmuteFunction = require('./functions/unmute.js');
-    console.log(`Logged in as ${client.user.tag}.`);
-    //
-    client.setInterval(() => {
-      unmuteFunction(client);
-    }, (60000));
-    //
-});
-
-client.on('error', (error) => {
-    console.log(error);
-});
-
-client.on('guildCreate', (guild) => {
-    client.settings.set(guild.id, require('./default_settings.js'));
-});
-
-client.on('guildDelete', (guild) => {
-    client.settings.delete(guild.id);
-});
-
-client.on('message', async (message) => {
-    if (message.channel.type !== 'text') return;
-    if (message.author.bot) return;
-    const settings = client.settings.get(message.guild.id) || require('./default_settings.js');
-    if (settings.ignored.users.includes(message.author.id)) return;
-    if (settings.ignored.channels.includes(message.channel.id)) return;
-    ///if (message.member.roles.some(r => settings.ignored.roles.includes(r.id))) return;
-    if (message.content === '<@484166057284861972> prefix') return message.reply(`the prefix is \`${settings.prefix}\``);
-    if (message.content.indexOf(settings.prefix) !== 0) return;
-    const args = message.content.split(' ').slice(1);
-    let command = message.content.split(' ')[0];
-    command = command.slice(settings.prefix.length).toLowerCase();
-    /**
-     * extremely shitty and dangerous command 'handler' right here. But it'll do for this.
-     */
-    console.log(client.commands);
-    const cmd = client.commands.get(command);
-    console.log(!cmd)
-    if (!cmd) return;
-    cmd.run(client, message, args);
+fs.readdir("./events/", (err, files) => {
+  if (err) return console.error(err);
+  files.forEach(file => {
+    const event = require(`./events/${file}`);
+    let eventName = file.split(".")[0];
+    client.on(eventName, event.bind(null, client));
+  });
 });
 
 process.on('unhandledRejection', e => console.log(e));

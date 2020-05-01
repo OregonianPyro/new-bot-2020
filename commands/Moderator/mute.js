@@ -37,7 +37,7 @@ module.exports.run = async (client, message, args) => {
     };
     ^^ WORKS ^^
     */ 
-    const time = args[1];
+    let time = args[1];
     if (!time || time.length < 1) return client.execHelp(message, 'mute');
     // if (ms(time) < 300000 || ms(time) > 604800000) {
     //     message.delete();
@@ -56,7 +56,7 @@ module.exports.run = async (client, message, args) => {
             id: member.user.id,
             guild: message.guild.id,
             guild_muted_role: client.settings.get(message.guild.id).muted_role,
-            time: time
+            time: Date.now() + parseInt(args[1]) * 1000
         });
     };
     let timeInMins;
