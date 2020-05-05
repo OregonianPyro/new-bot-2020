@@ -101,5 +101,6 @@ module.exports.help = {
     description: 'View, edit, or reset the bot\'s settings.',
     usage: '$settings <view|edit|reset> <key> <key2|val>',
     parameters: 'stringFlag, stringKey, stringKey2|stringVal',
-    aliases: '[]'
+    aliases: ['set', 'conf'],
+    cat: 'Admin-Conf'
 };

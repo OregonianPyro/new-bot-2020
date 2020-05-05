@@ -17,5 +17,5 @@ module.exports.help = {
     usage: '{prefix}ping',
     parameters: 'None',
     aliases: '[]',
-    category: 'Utility'
+    cat: 'Utility'
 };

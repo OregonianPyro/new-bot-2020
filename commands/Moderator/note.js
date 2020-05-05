@@ -57,5 +57,6 @@ module.exports.help = {
     description: 'Adds a private note for a user. This note can only be seen by staff members and can be used as a way to share information.',
     usage: '$note <@user|userID> <message>',
     parameters: 'snowflakeGuildMember, stringMessage',
-    aliases: "[]"
+    aliases: [],
+    cat: 'Moderator'
 };

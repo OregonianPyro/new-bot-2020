@@ -53,5 +53,6 @@ module.exports.help = {
     description: 'Deletes all moderation notes for a user.',
     usage: '$clearnotes <@user|userID> [reason]',
     parameters: 'snowflakeGuildMember, optionalStringReason',
-    aliases: "[]"
+    aliases: ['cn'],
+    cat: 'Moderator'
 };

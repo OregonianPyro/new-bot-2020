@@ -95,7 +95,7 @@ module.exports.help = {
     name: 'Ban', 
     description: 'Bans a member from the server.',
     usage: '$ban <@user|user ID> <reason>',
-    aliases: '[]',
+    aliases: ['permban', 'pban'],
     parameters: 'snowflakeGuildMember, stringReason',
-    category: 'Administrator'
+    cat: 'Administrator'
 };

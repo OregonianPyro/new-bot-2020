@@ -44,5 +44,6 @@ module.exports.help = {
     description: 'Clears `x` amount of messages from a channel.',
     usage: '$clear <1-100>',
     parameters: 'numberToClear',
-    aliases: ["prune"]
+    aliases: ["prune"],
+    cat: 'Moderator'
 };

@@ -97,7 +97,7 @@ module.exports.help = {
     name: 'Hardban', 
     description: 'Bans a user, deleting their messages sent in the last 7 days.',
     usage: '$hardban <@user|user ID> <reason>',
-    aliases: '[]',
+    aliases: ['hb'],
     parameters: 'snowflakeGuildMember, stringReason',
-    category: 'Administrator'
+    cat: 'Administrator'
 };

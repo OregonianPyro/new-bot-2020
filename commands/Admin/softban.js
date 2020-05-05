@@ -140,7 +140,7 @@ module.exports.help = {
     name: 'Softban', 
     description: 'Bans then unbans a user, deleting their messages sent in the last 24 hours. Great for spammers.',
     usage: '$softban <@user|user ID> <reason>',
-    aliases: '[]',
+    aliases: ['sb'],
     parameters: 'snowflakeGuildMember, stringReason',
-    category: 'Administrator'
+    cat: 'Administrator'
 };

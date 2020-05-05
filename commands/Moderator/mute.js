@@ -138,8 +138,8 @@ module.exports.help = {
     name: 'Mute', 
     description: 'Temporarily mutes a user.',
     usage: '$mute <@user|user ID> <time> <reason>',
-    aliases: '[]',
+    aliases: [],
     parameters: 'snowflakeGuildMember, integerTime, stringReason',
     remarks: 'Mute times cannot be less than 5 minutes, or more than 7 days. Muting an already muted user will override their current mute.',
-    category: 'Moderator'
+    cat: 'Moderator'
 };

@@ -45,5 +45,6 @@ module.exports.help = {
     description: 'Displays all moderation notes for a user.',
     usage: '$notes <@user|userID>',
     parameters: 'snowflakeGuildMember',
-    aliases: "[]"
+    aliases: [],
+    cat: 'Moderator'
 };

@@ -47,6 +47,6 @@ module.exports.help = {
     description: 'Displays details about a specific moderation case.',
     usage: '$case <number>',
     parameters: 'integerCaseNumber',
-    aliases: "[]",
-    category: 'Moderator'
+    aliases: [],
+    cat: 'Moderator'
 };

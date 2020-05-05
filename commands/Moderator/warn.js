@@ -42,30 +42,22 @@ module.exports.run = async (client, message, args) => {
         .addField('Reason', reason)
         .setColor('BLUE')
     const time = moment().format('MMMM Do YYYY, h:mm:ss a');
-    const current = client.modCases.get(message.guild.id);
-    const caseNum = client.modCases.get(message.guild.id).length + 1;
-    current.push({
+    let caseNum = client.modCases.get(message.guild.id);
+    caseNum = caseNum.array();
+    caseNum = caseNum.pop() + 1;
+    const ojb = { 
         case: caseNum,
         user: member.user.tag,
         moderator: message.author.tag,
         type: "warn",
         time: time,
         reason: reason
-    });
-    client.modCases.set(message.guild.id, current);
+    };
+    client.modCases.set(message.guild.id, obj, caseNum);
     if (!client.userModCases.has(member.user.id)) {
         await client.userModCases.set(member.user.id, []);
     };
-    const userCases = client.userModCases.get(member.user.id);
-    userCases.push({
-        case: caseNum,
-        user: member.user.tag,
-        moderator: message.author.tag,
-        type: "warn",
-        time: time,
-        reason: reason
-    });
-    
+    const userCases = client.userModCases.get(member.user.id); 
     client.userModCases.set(member.user.id, userCases);
     message.channel.send(member.user, channelEmbed);
     if (!client.settings.get(message.guild.id).logging.modlog.enabled || !message.guild.channels.cache.get(client.settings.get(message.guild.id).logging.modlog.id)) return;
@@ -94,5 +86,5 @@ module.exports.help = {
     usage: '$warn <@user|user ID> <reasonnnnn>',
     aliases: '[]',
     parameters: 'snowflakeGuildMember, stringReason',
-    category: 'Moderator'
+    cat: 'Moderator'
 };

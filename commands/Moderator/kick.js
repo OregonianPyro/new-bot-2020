@@ -94,7 +94,7 @@ module.exports.help = {
     name: 'Kick', 
     description: 'Kicks a member from the server.',
     usage: '$kick <@user|user ID> <reason>',
-    aliases: '[]',
+    aliases: [],
     parameters: 'snowflakeGuildMember, stringReason',
-    category: 'Moderator'
+    cat: 'Moderator'
 };
