@@ -7,14 +7,23 @@ client.defaultSettings = require('./default_settings');
 client.settings = new Enmap({ name: 'settings' });
 client.modCases = new Enmap({ name: 'moderation-cases-guild' });
 client.userModCases = new Enmap({ name: 'user-mod-cases' });
+client.warns = new Enmap({ name: 'warns' });
+client.stars = new Enmap({ name: 'stars' });
 client.roleHierachy = require('./functions/roleHierarchy');
 client.execHelp = require('./functions/execHelp.js');
 client.commands = new Enmap();
 client.aliases = new Enmap();
+client.aliases = new Enmap();
 client.activeMutes = new Enmap({ name: 'active-mutes' });
 client.spam = new Enmap({ name: "spam" });
-//
-//
+client.notes = new Enmap({ name: "notes" });
+client.publicRoles = new Enmap({ name: 'publicroles' });
+client.emotes = {
+  'x': '<:utilidexFail:710015590680494120>',
+  'warning': '<:utilidexWarn:710015590206799893>',
+  'check': '<:utilidexPass:710015589812404225>'
+};
+
 fs.readdir("./commands/Admin/", (err, files) => {
     if (err) return console.error(err);
     files.forEach(file => {
@@ -23,6 +32,12 @@ fs.readdir("./commands/Admin/", (err, files) => {
       let commandName = file.split(".")[0];
       console.log(`Attempting to load command ${commandName}`);
       client.commands.set(commandName, props);
+      console.log('Attempting to load aliases');
+      if (!typeof(props.aliases) !== 'array') return console.log("No aliases to set.")
+      for (let  i in props.aliases) {
+        client.aliases.set(props.aliases[i], commandName);
+        console.log(`Aliase '${props.aliases[i]}' set.`);
+      };
       console.log(`[ LOADED ] Loaded command ${props.help.name}`);
     });
   });
@@ -34,6 +49,12 @@ fs.readdir("./commands/Admin/", (err, files) => {
       let commandName = file.split(".")[0];
       console.log(`Attempting to load command ${commandName}`);
       client.commands.set(commandName, props);
+      console.log('Attempting to load aliases');
+      if (!typeof(props.aliases) !== 'array') return console.log("No aliases to set.")
+      for (let  i in props.aliases) {
+        client.aliases.set(props.aliases[i], commandName);
+        console.log(`Aliase '${props.aliases[i]}' set.`);
+      };
       console.log(`[ LOADED ] Loaded command ${props.help.name}`)
     });
   });
@@ -45,6 +66,11 @@ fs.readdir("./commands/Admin/", (err, files) => {
       let commandName = file.split(".")[0];
       console.log(`Attempting to load command ${commandName}`);
       client.commands.set(commandName, props);
+      console.log('Attempting to load aliases');
+      for (let  i in props.aliases) {
+        client.aliases.set(props.aliases[i], commandName);
+        console.log(`Aliase '${props.aliases[i]}' set.`);
+      };
       console.log(`[ LOADED ] Loaded command ${props.help.name}`)
     });
   });
@@ -56,6 +82,11 @@ fs.readdir("./commands/Admin/", (err, files) => {
       let commandName = file.split(".")[0];
       console.log(`Attempting to load command ${commandName}`);
       client.commands.set(commandName, props);
+      console.log('Attempting to load aliases');
+      for (let  i in props.aliases) {
+        client.aliases.set(props.aliases[i], commandName);
+        console.log(`Aliase '${props.aliases[i]}' set.`);
+      };
       console.log(`[ LOADED ] Loaded command ${props.help.name}`)
     });
   });
@@ -67,6 +98,11 @@ fs.readdir("./commands/Admin/", (err, files) => {
       let commandName = file.split(".")[0];
       console.log(`Attempting to load command ${commandName}`);
       client.commands.set(commandName, props);
+      console.log('Attempting to load aliases');
+      for (let  i in props.help.aliases) {
+        client.aliases.set(props.help.aliases[i], props);
+        console.log(`Aliase '${props.help.aliases[i]}' set.`);
+      };
       console.log(`[ LOADED ] Loaded command ${props.help.name}`)
     });
   });
@@ -78,6 +114,11 @@ fs.readdir("./commands/Admin/", (err, files) => {
       let commandName = file.split(".")[0];
       console.log(`Attempting to load command ${commandName}`);
       client.commands.set(commandName, props);
+      console.log('Attempting to load aliases');
+      for (let  i in props.help.aliases) {
+        client.aliases.set(props.help.aliases[i], props);
+        console.log(`Aliase '${props.help.aliases[i]}' set.`);
+      };
       console.log(`[ LOADED ] Loaded command ${props.help.name}`)
     });
   });
@@ -89,10 +130,15 @@ fs.readdir("./commands/Admin/", (err, files) => {
       let commandName = file.split(".")[0];
       console.log(`Attempting to load command ${commandName}`);
       client.commands.set(commandName, props);
-      });
+      console.log('Attempting to load aliases');
+      for (let  i in props.help.aliases) {
+        client.aliases.set(props.help.aliases[i], props);
+        console.log(`Aliase '${props.help.aliases[i]}' set.`);
+      };
+      console.log(`[ LOADED ] Loaded command ${props.help.name}`)
+    });
   });
-//
-//
+
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
   files.forEach(file => {

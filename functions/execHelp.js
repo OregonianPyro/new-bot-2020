@@ -11,8 +11,8 @@ module.exports = async (message, commandName) => {
         .setDescription('`< >` denotes a __required__ parameter.\n`[ ]` denotes an optional parameter.')
         .addField('Description', cmdFile.help.description, false)
         .addField('Usage', cmdFile.help.usage, false)
-        .addField('Parameters', `\`${cmdFile.help.parameters}\``)
-        .addField('Aliases', cmdFile.help.aliases)
+        .addField('Parameters', cmdFile.help.parameters ? `\`\`\`${cmdFile.help.parameters}\`\`\`` : 'None')
+        .addField('Aliases', cmdFile.help.aliases.length > 0 ? cmdFile.help.aliases.join(' ') : 'None')
         .setColor('BLUE')
     return message.channel.send(helpEmbed);
 };

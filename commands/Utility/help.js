@@ -2,7 +2,7 @@ module.exports.run = async (client, message, args) => {
     const { MessageEmbed } = require('discord.js');
     const fs = require('fs');
     const admin = [];
-    const adminconf = [];
+    const adminConf = [];
     const games = [];
     const utility = [];
     const moderator = [];
@@ -10,26 +10,13 @@ module.exports.run = async (client, message, args) => {
     for (let i in client.commands.array()) {
         const arrayed = client.commands.array();
         if (!arrayed[i].help.cat) continue;
-        switch (arrayed[i].help.cat.toLowerCase()) {
-            case 'administrator':{
-                admin.push(`$${arrayed[i].help.name.toLowerCase()} - ${arrayed[i].help.description}`);
-            };
-            case 'admin-conf':{
-                adminconf.push(`$${arrayed[i].help.name.toLowerCase()} - ${arrayed[i].help.description}`);
-            };
-            case 'games':{
-                games.push(`$${arrayed[i].help.name.toLowerCase()} - ${arrayed[i].help.description}`);
-            };
-            case 'utility':{
-                utility.push(`$${arrayed[i].help.name.toLowerCase()} - ${arrayed[i].help.description}`);
-            };
-            case 'moderator':{
-                moderator.push(`$${arrayed[i].help.name.toLowerCase()} - ${arrayed[i].help.description}`);
-            };
-            case 'mod-fun':{
-                modfun.push(`$${arrayed[i].help.name.toLowerCase()} - ${arrayed[i].help.description}`);
-            };
-        };
+        let cmd = arrayed[i].help;
+        if (cmd.cat.toLowerCase() === 'administrator') admin.push(`$${cmd.name.toLowerCase()} - ${cmd.description}`);
+        if (cmd.cat.toLowerCase() === 'admin-conf') adminConf.push(`$${cmd.name.toLowerCase()} - ${cmd.description}`);
+        if (cmd.cat.toLowerCase() === 'games') games.push(`$${cmd.name.toLowerCase()} - ${cmd.description}`);
+        if (cmd.cat.toLowerCase() === 'utility') utility.push(`$${cmd.name.toLowerCase()} - ${cmd.description}`);
+        if (cmd.cat.toLowerCase() === 'moderator') moderator.push(`$${cmd.name.toLowerCase()} - ${cmd.description}`);
+        if (cmd.cat.toLowerCase() === 'mod-fun') modfun.push(`$${cmd.name.toLowerCase()} - ${cmd.description}`);
     };
     if (args[0]) {
         let cmd = args[0].toLowerCase();
@@ -42,12 +29,13 @@ module.exports.run = async (client, message, args) => {
         const embed = new MessageEmbed()
             .setColor('BLUE')
             .setAuthor(`Command - $${cmd.help.name}`, client.user.avatarURL())
+            .setDescription('`< >` denotes a __required__ parameter.\n`[ ]` denotes an optional parameter.')
             .addField('Description', cmd.help.description)
+            .addField('Usage', cmd.help.usage)
             .addField('Alias(es)', cmd.help.aliases.length > 0 ? cmd.aliases.join(' ') : 'None')
-            .addField('Parameters', cmd.help.paremeters ? cmd.help.parameters : 'None')
+            .addField('Parameters', cmd.help.parameters.length ? cmd.help.parameters : 'None')
         return message.channel.send(embed);
     };
-    /*
     if (!message.member.permissions.has('KICK_MEMBERS')) {
         const embed = new MessageEmbed()
             .setColor('BLUE')
@@ -65,16 +53,15 @@ module.exports.run = async (client, message, args) => {
         .addField('Moderator', moderator.join('\n'))
         .addField('Moderator-Fun', modfun.join('\n'))
     return message.channel.send(embed);
-    };*/
+    };
     if (message.member.permissions.has('ADMINISTRATOR')) {
-        console.log(utility);
         const embed = new MessageEmbed()
         .setColor('BLUE')
         .setAuthor('Utilidex Commands', client.user.avatarURL())
         .addField('Help / Utility', utility.join('\n'))
         .addField('Games', games.join('\n'))
         .addField('Moderator', moderator.join('\n'))
-        //.addField('Moderator-Fun', modfun.join('\n'))
+        .addField('Moderator-Fun', modfun.join('\n'))
         .addField('Administrator', admin.join('\n'))
     return message.channel.send(embed);
     };
@@ -82,7 +69,7 @@ module.exports.run = async (client, message, args) => {
 
 module.exports.conf = {
     enabled: true,
-    reason: null,
+    reason: 'Command has some errors with it.',
     perms: {
         user: 'SEND_MESSAGES',
         bot: 'SEND_MESSAGES'

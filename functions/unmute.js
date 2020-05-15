@@ -10,7 +10,7 @@ module.exports = async (client) => {
         if (!guildMutedRole) continue;
         const member = guild.members.cache.get(sandbox[i].id);
         if (!member) continue;
-        if (Date.now() > time) {
+        if (ms(Date.now()) > time) {
             try {
                 await member.roles.remove(guildMutedRole);
             } catch (e) {

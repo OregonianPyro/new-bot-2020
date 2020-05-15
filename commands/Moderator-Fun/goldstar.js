@@ -46,5 +46,6 @@ module.exports.help = {
     description: 'Awards a gold star to a user.',
     usage: '$goldstar <@user|user ID> <reason>',
     parameters: 'snowflakeGuildMember, stringReason',
-    aliases: ['gstar', 'gs']
+    aliases: ['gstar', 'gs'],
+    cat: 'mod-fun'
 };

@@ -39,5 +39,6 @@ module.exports.help = {
     description: 'Displays all stars for a user.',
     usage: '$stars <@user|user ID>',
     parameters: 'snowflakeGuildMember',
-    aliases: []
+    aliases: [],
+    cat: 'mod-fun'
 };

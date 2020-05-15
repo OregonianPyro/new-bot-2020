@@ -1,5 +1,5 @@
 module.exports.run = async (client, message, args) => {
-    const notes = client.notes;
+    const warns = client.warns;
     const settings = client.settings.get(message.guild.id);
     const { MessageEmbed } = require('discord.js');
     const moment = require('moment');
@@ -7,32 +7,32 @@ module.exports.run = async (client, message, args) => {
         message.delete();
         return message.channel.send('**You must be a moderator to run this command.**');;
     };
-    if (!args[0]) return client.execHelp(message, 'clearnotes');
+    if (!args[0]) return client.execHelp(message, 'clearwarns');
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if (!member) {
         message.delete();
         return message.channel.send('**Error finding that user.**');
     };
-    if (!notes.has(member.user.id)) {
+    if (!warns.has(member.user.id)) {
         message.delete();
-        return message.channel.send('That user has no moderation notes.');
+        return message.channel.send('That user has no active warnings.');
     }; 
     let reason;
     !args[1] ? reason = 'N/A' : args.slice(1).join(' ');
     await message.delete();
-    notes.delete(member.user.id);
+    warns.delete(member.user.id);
     const embed = new MessageEmbed()
-        .setAuthor(member.user.username, member.user.avatarURL())
-        .setTitle('Moderation Notes Deleted')
-        .setDescription(`${message.author.username} deleted all moderation notes for **${member.user.username}**`)
+        .setAuthor(member.user.username, member.user.displayAvatarURL())
+        .setTitle('Warnings Cleared')
+        .setDescription(`Current warnings for **${member.user.username}** have been cleared by ${message.author.username}`)
         .addField('Reason', reason)
         .setColor('BLUE')
-    message.channel.send(embed);
+    message.channel.send(member.user, embed);
     if (!settings.logging.modlog.enabled || !message.guild.channels.cache.get(settings.logging.modlog.id)) return;
     let channel = message.guild.channels.cache.get(settings.logging.modlog.id);  
     const logEmbed = new MessageEmbed()
-        .setAuthor(`${member.user.tag} | Notes Deleted`, member.user.avatarURL())
-        .setDescription(`${message.author.username} deleted all moderation notes for **${member.user.tag}** (\`${member.user.id}\`)`)
+        .setAuthor(`${member.user.tag} | Warnings Cleared`, member.user.displayAvatarURL())
+        .setDescription(`${message.author.username} cleared all warnings for **${member.user.tag}** (\`${member.user.id}\`)`)
         .addField('Reason', reason)
         .setFooter( moment().format('MMMM Do YYYY, h:mm:ss a'))
         .setColor('BLUE')
@@ -49,10 +49,10 @@ module.exports.conf = {
 };
 
 module.exports.help = {
-    name: 'Clearnotes',
-    description: 'Deletes all moderation notes for a user.',
-    usage: '$clearnotes <@user|userID> [reason]',
+    name: 'Clearwarns',
+    description: 'Clears all warnings for a user.',
+    usage: '$clearwarns <@user|userID> [reason]',
     parameters: 'snowflakeGuildMember, optionalStringReason',
-    aliases: ['cn'],
+    aliases: ['cw', 'deletewarns', 'clearwarnings'],
     cat: 'Moderator'
 };

@@ -47,29 +47,29 @@ module.exports.run = async (client, message, args) => {
         return message.channel.send(`:no_entry: **Command failed: ${e.message}**`);
     };
     const time = moment().format('MMMM Do YYYY, h:mm:ss a');
-    const current = client.modCases.get(message.guild.id);
-    const caseNum = client.modCases.get(message.guild.id).length + 1;
-    current.push({
-        case: caseNum,
-        user: member.user.tag,
-        moderator: message.author.tag,
-        type: "ban",
-        time: time
-    });
-    client.modCases.set(message.guild.id, current);
-    if (!client.userModCases.has(member.user.id)) {
-        await client.userModCases.set(member.user.id, []);
-    };
-    const userCases = client.userModCases.get(member.user.id);
-    console.log(client.userModCases.get(member.user.id));
-    userCases.push({
-        case: caseNum,
-        user: member.user.tag,
-        moderator: message.author.tag,
-        type: "ban",
-        time: time
-    });
-    client.userModCases.set(member.user.id, userCases);
+    // const current = client.modCases.get(message.guild.id);
+    // const caseNum = client.modCases.get(message.guild.id).length + 1;
+    // current.push({
+    //     case: caseNum,
+    //     user: member.user.tag,
+    //     moderator: message.author.tag,
+    //     type: "ban",
+    //     time: time
+    // });
+    // client.modCases.set(message.guild.id, current);
+    // if (!client.userModCases.has(member.user.id)) {
+    //     await client.userModCases.set(member.user.id, []);
+    // };
+    // const userCases = client.userModCases.get(member.user.id);
+    // console.log(client.userModCases.get(member.user.id));
+    // userCases.push({
+    //     case: caseNum,
+    //     user: member.user.tag,
+    //     moderator: message.author.tag,
+    //     type: "ban",
+    //     time: time
+    // });
+    // client.userModCases.set(member.user.id, userCases);
     message.channel.send(member.user, channelEmbed);
     if (!client.settings.get(message.guild.id).logging.modlog.enabled || !message.guild.channels.cache.get(client.settings.get(message.guild.id).logging.modlog.id)) return;
     let channel = message.guild.channels.cache.get(client.settings.get(message.guild.id).logging.modlog.id);  
@@ -77,7 +77,7 @@ module.exports.run = async (client, message, args) => {
         .setAuthor(`${member.user.tag} | Ban`, member.user.avatarURL())
         .setDescription(`**${member.user.tag}** (\`${member.user.id}\`) was banned by ${message.author.tag}`)
         .addField('Reason', reason)
-        .setFooter(`Case #${caseNum} | ${time}`)
+        .setFooter(`Case #NaN | ${time}`)
         .setColor('RED')
     return channel.send(logEmbed);
 };

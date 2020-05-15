@@ -34,5 +34,6 @@ module.exports.help = {
     description: 'Deletes all stars for a user.',
     usage: '$clearstars <@user|user ID> [reason]',
     parameters: 'snowflakeGuildMember, stringReason',
-    aliases: ['cs', 'deletestars', 'nostars']
+    aliases: ['cs', 'deletestars', 'nostars'],
+    cat: 'mod-fun'
 };

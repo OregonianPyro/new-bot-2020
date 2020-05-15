@@ -42,23 +42,31 @@ module.exports.run = async (client, message, args) => {
         .addField('Reason', reason)
         .setColor('BLUE')
     const time = moment().format('MMMM Do YYYY, h:mm:ss a');
-    let caseNum = client.modCases.get(message.guild.id);
-    caseNum = caseNum.array();
-    caseNum = caseNum.pop() + 1;
-    const ojb = { 
-        case: caseNum,
-        user: member.user.tag,
-        moderator: message.author.tag,
-        type: "warn",
-        time: time,
-        reason: reason
+    let counter = client.modCases.get(message.guild.id);
+    counter = counter.length;
+    const obj = {
+        caseNum: counter,
+        user: member.user.username,
+        userID: member.user.id,
+        moderator: message.author.username,
+        moderatorID: message.author.id,
+        action: 'Warning',
+        reason: reason,
+        date: time,
+        resolved: false,
+        length: null  
     };
-    client.modCases.set(message.guild.id, obj, caseNum);
-    if (!client.userModCases.has(member.user.id)) {
-        await client.userModCases.set(member.user.id, []);
-    };
-    const userCases = client.userModCases.get(member.user.id); 
-    client.userModCases.set(member.user.id, userCases);
+    const curCasesGuild = client.modCases.get(message.guild.id);
+    curCasesGuild.push(obj);
+    await client.modCases.set(message.guild.id, curCasesGuild);
+    if (!client.userModCases.has(member.user.id)) client.userModCases.set(member.user.id, []);
+    const curCasesUser = client.userModCases.get(member.user.id);
+    curCasesUser.push(obj);
+    await client.userModCases.set(member.user.id, curCasesUser);
+    if (!client.warns.has(member.user.id)) client.warns.set(member.user.id, []);
+    const curWarnsUser = client.warns.get(member.user.id);
+    curWarnsUser.push(obj);
+    await client.warns.set(member.user.id, curWarnsUser);
     message.channel.send(member.user, channelEmbed);
     if (!client.settings.get(message.guild.id).logging.modlog.enabled || !message.guild.channels.cache.get(client.settings.get(message.guild.id).logging.modlog.id)) return;
     let channel = message.guild.channels.cache.get(client.settings.get(message.guild.id).logging.modlog.id);  
@@ -66,7 +74,7 @@ module.exports.run = async (client, message, args) => {
         .setAuthor(`${member.user.tag} | Warn`, member.user.avatarURL())
         .setDescription(`**${member.user.tag}** (\`${member.user.id}\`) was warned by ${message.author.tag}`)
         .addField('Reason', reason)
-        .setFooter(`Case #${caseNum} | ${time}`)
+        .setFooter(`Case #${counter} | ${time}`) 
         .setColor('BLUE')
     return channel.send(logEmbed);
 };

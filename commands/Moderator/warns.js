@@ -1,5 +1,5 @@
 module.exports.run = async (client, message, args) => {
-    const notes = client.notes;
+    const notes = client.warns;
     const settings = client.settings.get(message.guild.id);
     const { MessageEmbed } = require('discord.js');
     const moment = require('moment');
@@ -9,7 +9,7 @@ module.exports.run = async (client, message, args) => {
         message.delete();
         return message.channel.send('**You must be a moderator to run this command.**');;
     };
-    if (!args[0]) return client.execHelp(message, 'notes');
+    if (!args[0]) return client.execHelp(message, 'warns');
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if (!member) {
         message.delete();
@@ -17,16 +17,18 @@ module.exports.run = async (client, message, args) => {
     };
     if (!notes.has(member.user.id)) {
         message.delete();
-        return message.channel.send('That user has no moderation notes.');
+        return message.channel.send('That user has no active warnings.');
     }; 
     await message.delete();
-    const userNotes = client.notes.get(member.user.id);
+    const userWarns = client.warns.get(member.user.id);
     const embed = new MessageEmbed()
         .setColor('BLUE')
-        .setAuthor(member.user.username, member.user.avatarURL())
-        .setTitle('Moderation Notes')
-    for (let i in userNotes) {
-        embed.addField(wtf, `Moderator: ${userNotes[i].moderator}\nTime: ${userNotes[i].time}\n**Note: ${userNotes[i].message}**`)
+        .setAuthor(member.user.username, member.user.displayAvatarURL())
+        .setTitle('Warning History')
+        .setDescription(`Found a total of **${userWarns.length}** warnings for ${member.user.username}`)
+    for (let i in userWarns) {
+        let tc = userWarns[i];
+        embed.addField(wtf, `Case #${tc.caseNum}\nModerator: ${tc.moderator}\nReason: ${tc.reason}\nDate: ${tc.date.split(',')[0]}`)
     };
     return message.channel.send(embed);
 };
@@ -41,10 +43,10 @@ module.exports.conf = {
 };
 
 module.exports.help = {
-    name: 'notes',
-    description: 'Displays all moderation notes for a user.',
-    usage: '$notes <@user|userID>',
+    name: 'Warns',
+    description: 'Displays all active warnings for a user.',
+    usage: '$warns <@user|userID>',
     parameters: 'snowflakeGuildMember',
-    aliases: [],
+    aliases: ['warnings', 'showwarnings', 'userwarns'],
     cat: 'Moderator'
 };

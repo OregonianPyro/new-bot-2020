@@ -1,5 +1,12 @@
 module.exports.run = async (client, message, args) => {
-    return message.channel.send(`My ping is: \`${client.ws.ping}ms\``);
+    const { MessageEmbed } = require('discord.js');
+    const msg = await message.channel.send('Pinging...');
+    const embed = new MessageEmbed()
+      .setColor('BLUE')
+      .setAuthor(client.user.username, client.user.avatarURL())
+      .setDescription(`It took me **${msg.createdTimestamp - message.createdTimestamp}**ms to edit that message!`)
+      .addField(':heartbeat: Discord Hearbeat', `**${client.ws.ping.toFixed()}**ms`);
+    msg.edit('Pong!', embed);
 };
 
 module.exports.conf = {
@@ -16,6 +23,6 @@ module.exports.help = {
     description: 'Responds with the bot\'s ping.',
     usage: '{prefix}ping',
     parameters: 'None',
-    aliases: '[]',
+    aliases: [],
     cat: 'Utility'
 };
